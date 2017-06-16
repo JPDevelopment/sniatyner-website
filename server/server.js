@@ -5,8 +5,8 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 
 app.use(express.static(path.join(__dirname, '../public'))) // Statically serves the 'public' folder
+app.use(express.static(path.join(__dirname, '../build'))) // Statically serves the 'build' folder
 
-// Any routes or other various middlewares should go here!
 app.use(morgan('dev')) // Logging middleware
 app.use(bodyParser.json()) // Parsing middleware
 app.use(bodyParser.urlencoded({ extended: true }))
