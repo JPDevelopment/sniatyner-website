@@ -1,0 +1,16 @@
+{
+  "name": "sniatyner",
+  "version": "0.1.0",
+  "description": "Website for the United Sniatyner Sick And Benevolent Association, Inc.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jason Powell",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "morgan": "^1.8.2"
+  }
+}
