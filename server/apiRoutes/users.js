@@ -1,7 +1,10 @@
 const router = require('express').Router()
+const User = require('../../db/models/user.js')
 
 router.get('/', function(req, res, next){
-  res.send('GET')
+  User.findAll()
+    .then(users => res.json(users))
+    .catch(next)
 })
 
 router.post('/', function(req, res, next){
