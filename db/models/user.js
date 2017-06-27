@@ -27,37 +27,36 @@ const User = db.define('user', {
   salt: {
     type: Sequelize.STRING
   }
-}, {
-  instanceMethods: {
-    sanitize: function () {
-      return _.omit(this.toJSON(), ['password', 'salt']);
-    },
-    correctPassword: function (candidatePassword) {
-      return this.Model.encryptPassword(candidatePassword, this.salt) === this.password;
-    }
-  },
-  classMethods: {
-    generateSalt: function () {
-      return crypto.randomBytes(16).toString('base64')
-    },
-    encryptPassword: function (plainText, salt) {
-      const hash = crypto.createHash('sha1')
-      hash.update(plainText);
-      hash.update(salt);
-      return hash.digest('hex')
-    }
-  },
-  hooks: {
-    beforeCreate: setSaltAndPassword,
-    beforeUpdate: setSaltAndPassword
-  }
 })
 
 function setSaltAndPassword(user){
   if (user.changed('password')) {
-    user.salt = user.Model.generateSalt()
-    user.password = user.Model.encryptPassword(user.password, user.salt)
+    user.salt = User.generateSalt()
+    user.password = User.encryptPassword(user.password, user.salt)
   }
 }
+
+Object.assign(User.prototype, {
+  sanitize: function () {
+    return _.omit(this.toJSON(), ['password', 'salt']);
+  },
+  correctPassword: function (candidatePassword) {
+    return User.encryptPassword(candidatePassword, this.salt) === this.password;
+  }
+})
+
+User.generateSalt = function () {
+  return crypto.randomBytes(16).toString('base64')
+}
+
+User.encryptPassword = function (plainText, salt) {
+  const hash = crypto.createHash('sha1')
+  hash.update(plainText);
+  hash.update(salt);
+  return hash.digest('hex')
+}
+
+User.beforeCreate(setSaltAndPassword)
+User.beforeUpdate(setSaltAndPassword)
 
 module.exports = User

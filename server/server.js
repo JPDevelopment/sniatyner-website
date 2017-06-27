@@ -21,7 +21,6 @@ app.use(express.static(path.join(__dirname, '../build')))
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use('/api', require('./apiRoutes'))
 
 app.use(session({
   secret: process.env.SESSION_SECRET || 'a wildly insecure secret',
@@ -43,6 +42,8 @@ passport.deserializeUser((id, done) => {
     .then(user => done(null, user))
     .catch(done)
 })
+
+app.use('/api', require('./apiRoutes'))
 
 app.get('*', function (req, res, next) {
   res.sendFile(path.join(__dirname, '../public/index.html'))

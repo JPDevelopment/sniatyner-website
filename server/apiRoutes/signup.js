@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const User = require('../../db/models/user.js')
 
-router.post('/signup', (req, res, next) => {
+router.post('/', (req, res, next) => {
   User.create(req.body)
     .then(user => {
       req.login(user, err => {
